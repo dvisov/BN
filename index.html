@@ -139,10 +139,8 @@
       box-shadow: 0 14px 40px rgba(0,0,0,.18);
     }
 
-    .gif-wrap iframe {
+    .gif-wrap img {
       width: 100%;
-      height: 240px;
-      border: 0;
       display: block;
     }
 
@@ -207,18 +205,20 @@
     <!-- FIRST NO CLICK: PRANK PANEL -->
     <section class="panel" id="prank">
       <h2>Nice try, hahahaha 😈</h2>
-      <!-- Put your image file next to index.html and name it nice-try.png -->
       <img class="nice-try-img" src="nice-try.png" alt="Nice try" />
       <p>Back to the question…</p>
     </section>
 
- <section class="result" id="result">
+    <!-- YES CLICK: RESULT PANEL -->
+    <section class="panel" id="result">
       <h2>YAY! 🎉</h2>
-      <img
-        class="fireworks"
-        src="https://tenor.com/rjdz9NpxPl7.gif"
-        alt="Fireworks"
-      />
+      <p>I know you clicked “No” the first time.</p>
+      <div class="gif-wrap">
+        <img
+          src="https://media1.tenor.com/m/x7XtuEuhFqEAAAAd/james-doakes-doakes.gif"
+          alt="Celebration"
+        />
+      </div>
     </section>
   </main>
 
@@ -379,6 +379,3 @@
   </script>
 </body>
 </html>
-
-
-
