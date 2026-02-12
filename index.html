@@ -22,11 +22,16 @@
     body {
       margin: 0;
       min-height: 100svh;
-      display: grid;
-      place-items: center;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
       background: radial-gradient(circle at top, var(--bg2), var(--bg1));
       font-family: system-ui, sans-serif;
-      overflow: hidden;
+
+      /* Phone-friendly: allow vertical scroll, prevent horizontal cut/scroll */
+      overflow-y: auto;
+      overflow-x: hidden;
+
       padding: 16px;
     }
 
@@ -41,6 +46,8 @@
     }
 
     .card {
+      margin-top: 16px;
+      margin-bottom: 16px;
       width: min(720px, 92vw);
       padding: 26px 22px;
       background: var(--card);
@@ -142,6 +149,14 @@
     .gif-wrap img {
       width: 100%;
       display: block;
+    }
+
+    /* Tighten layout on short phone screens to avoid bottom cut-off */
+    @media (max-height: 700px) {
+      .art { width: min(200px, 70vw); }
+      .gif-wrap { width: min(360px, 92vw); }
+      h1 { font-size: clamp(22px, 5vw, 34px); }
+      .button-zone { height: 180px; }
     }
 
     @keyframes pop {
@@ -363,8 +378,9 @@
         return;
       }
 
-      // After first click: never let "No" be clicked
+      // After first click: never let "No" land — make it jump away
       e.preventDefault();
+      moveNo(e.clientX || (window.innerWidth / 2), e.clientY || (window.innerHeight / 2));
     });
 
     /* ---------- YES CLICK ---------- */
