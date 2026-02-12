@@ -28,7 +28,6 @@
       background: radial-gradient(circle at top, var(--bg2), var(--bg1));
       font-family: system-ui, sans-serif;
 
-      /* Phone-friendly: allow vertical scroll, prevent horizontal cut/scroll */
       overflow-y: auto;
       overflow-x: hidden;
 
@@ -46,8 +45,7 @@
     }
 
     .card {
-      margin-top: 16px;
-      margin-bottom: 16px;
+      margin: 16px 0;
       width: min(720px, 92vw);
       padding: 26px 22px;
       background: var(--card);
@@ -131,7 +129,8 @@
     }
 
     .nice-try-img {
-      width: min(380px, 90vw);
+      width: 100%;
+      max-width: 380px;
       border-radius: 16px;
       box-shadow: 0 14px 40px rgba(0,0,0,.18);
       margin: 10px auto 0;
@@ -139,7 +138,8 @@
     }
 
     .gif-wrap {
-      width: min(420px, 92vw);
+      width: 100%;
+      max-width: 420px;
       margin: 12px auto 0;
       border-radius: 16px;
       overflow: hidden;
@@ -151,17 +151,16 @@
       display: block;
     }
 
-    /* Tighten layout on short phone screens to avoid bottom cut-off */
-    @media (max-height: 700px) {
-      .art { width: min(200px, 70vw); }
-      .gif-wrap { width: min(360px, 92vw); }
-      h1 { font-size: clamp(22px, 5vw, 34px); }
-      .button-zone { height: 180px; }
-    }
-
     @keyframes pop {
       from { transform: scale(.96); opacity: 0; }
       to { transform: scale(1); opacity: 1; }
+    }
+
+    /* Tighter layout on short screens */
+    @media (max-height: 700px) {
+      .art { width: min(200px, 70vw); }
+      h1 { font-size: clamp(22px, 5vw, 34px); }
+      .button-zone { height: 180px; }
     }
   </style>
 </head>
@@ -292,21 +291,18 @@
       }, 300);
     }
 
-    /* ---------- BUTTON RESET ---------- */
     function resetNoPosition() {
       noBtn.style.left = "62%";
       noBtn.style.top = "50%";
       noBtn.style.transform = "translateY(-50%)";
     }
 
-    /* ---------- YES BUTTON GROWS ---------- */
     let yesScale = 1;
     function growYes() {
       yesScale = Math.min(2.2, yesScale + 0.1);
       yesBtn.style.transform = `translateY(-50%) scale(${yesScale})`;
     }
 
-    /* ---------- NO BUTTON RUNS AWAY (AFTER FIRST NO) ---------- */
     function clamp(n, min, max) {
       return Math.max(min, Math.min(max, n));
     }
@@ -334,7 +330,6 @@
       growYes();
     }
 
-    // Only dodge AFTER she successfully clicks No once
     zone.addEventListener("pointermove", e => {
       if (noClicks < 1) return;
 
@@ -347,28 +342,22 @@
       if (d < 140) moveNo(e.clientX, e.clientY);
     });
 
-    // Mobile: tapping No after first time should also make it jump
     noBtn.addEventListener("pointerdown", (e) => {
-      if (noClicks < 1) return; // first "No" should be clickable
+      if (noClicks < 1) return;
       e.preventDefault();
-      moveNo(e.clientX, e.clientY);
+      moveNo(e.clientX || (window.innerWidth/2), e.clientY || (window.innerHeight/2));
     });
 
-    /* ---------- FIRST NO CLICK -> PRANK -> BACK ---------- */
     noBtn.addEventListener("click", (e) => {
       if (noClicks === 0) {
-        // allow the first click to land
         noClicks = 1;
 
-        // show prank
         zone.style.display = "none";
         hint.style.display = "none";
         prank.style.display = "block";
 
-        // reset no position so when we return it's clean
         resetNoPosition();
 
-        // return to buttons after 2.0s
         setTimeout(() => {
           prank.style.display = "none";
           zone.style.display = "block";
@@ -378,12 +367,10 @@
         return;
       }
 
-      // After first click: never let "No" land — make it jump away
       e.preventDefault();
-      moveNo(e.clientX || (window.innerWidth / 2), e.clientY || (window.innerHeight / 2));
+      moveNo(e.clientX || (window.innerWidth/2), e.clientY || (window.innerHeight/2));
     });
 
-    /* ---------- YES CLICK ---------- */
     yesBtn.addEventListener("click", () => {
       zone.style.display = "none";
       hint.style.display = "none";
